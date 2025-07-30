@@ -1,15 +1,12 @@
 import { Controller, Get, Param, Query } from "@nestjs/common";
 import { UserService } from "./user.service";
+import { UserQueryDto } from "./user.dto";
 
 @Controller('users')
 export class UserController {
     constructor (private userService: UserService) {}
-    async listUsers() {
-
-    }
 
     @Get('')
-    async getUserByEmail(@Query('email') email: string) {
-        return await this.userService.getUserByEmail(email)
+    async listUsers(@Query() queryParams: UserQueryDto) {
     }
 }

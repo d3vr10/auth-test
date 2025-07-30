@@ -1,10 +1,11 @@
 import { Injectable } from "@nestjs/common";
-import { UserRepository } from "./user.repository";
+import { UserFilter, UserRepository } from "./user.repository";
 
 @Injectable()
 export class UserService {
     constructor (private userRepository: UserRepository,) {}
-    async getUserByEmail(email: string) {
-        return await this.userRepository.getUserByEmail(email)
+    async find(filter: UserFilter) {
+        const result = await this.userRepository.find(filter)
+        return result?? []
     }
 }
