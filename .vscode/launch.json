@@ -1,0 +1,10 @@
+{
+    "configurations": [{
+        "console": "integratedTerminal",
+        "type": "node",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": ["run", "start:dev"],
+        "request": "launch",
+        "name": "Debug Nest App"
+    }]
+}

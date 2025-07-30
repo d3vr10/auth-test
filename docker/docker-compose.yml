@@ -1,0 +1,9 @@
+services:
+  db:
+    image: postgres:alpine
+    ports:
+    - 30001:5432
+    environment:
+    - POSTGRES_PASSWORD=testing123
+  
+   
