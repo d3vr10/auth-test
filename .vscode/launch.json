@@ -1,10 +1,26 @@
 {
-    "configurations": [{
-        "console": "integratedTerminal",
-        "type": "node",
-        "runtimeExecutable": "npm",
-        "runtimeArgs": ["run", "start:dev"],
-        "request": "launch",
-        "name": "Debug Nest App"
-    }]
+    "configurations": [
+        {
+            "console": "integratedTerminal",
+            "type": "node",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "start:dev"
+            ],
+            "request": "launch",
+            "name": "Debug Nest App"
+        },
+        {
+            "console": "integratedTerminal",
+            "type": "node",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "db:gen:users"
+            ],
+            "request": "launch",
+            "name": "Debug Populate Nest App"
+        }
+    ]
 }

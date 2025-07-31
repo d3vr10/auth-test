@@ -7,8 +7,9 @@ export class UserController {
     async listUsers() {
 
     }
+
     @Get('')
     async getUserByEmail(@Query('email') email: string) {
-        return this.userService.getUserByEmail(email)
+        return await this.userService.getUserByEmail(email)
     }
 }

@@ -7,7 +7,6 @@ export const userRoles = {
     USER: "user",
 } as const;
 
-export type UserRole = (typeof userRoles)[keyof typeof userRoles]
 
 export const roleSchema = pgEnum('role', Object.values(userRoles) as [string, ...string[]])
 
@@ -27,3 +26,6 @@ export const userSchema = pgTable("user", {
     createdAt: timestamp("created_at", { withTimezone: true }),
     updatedAt: timestamp("updated_at", { withTimezone: true }),
 })
+
+export type User = typeof userSchema.$inferSelect
+export type UserRole = (typeof userRoles)[keyof typeof userRoles]

@@ -6,7 +6,7 @@ import * as schema from "src/modules/db/schema"
 export const DB_CONNECTION_URL = "postgres://postgres:testing123@localhost:30001/postgres" ;
 export const DB_PROVIDER = Symbol('DB_PROVIDER');
 export type DBConnection = NodePgDatabase<typeof schema>;
-export const dbProvider: FactoryProvider = {
+export const dbProvider = {
     provide: DB_PROVIDER,
     useFactory: () => {
         const pool = new Pool({connectionString: DB_CONNECTION_URL, max: 80})
