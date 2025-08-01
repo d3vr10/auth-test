@@ -23,7 +23,7 @@ export class UserRepository {
         })
         return result ?? null
     }
-    async findByUUID(id: string) {
+    async findById(id: string) {
         const result = await this.db.query.userSchema.findFirst({
             where: eq(userSchema.id, id)
         })

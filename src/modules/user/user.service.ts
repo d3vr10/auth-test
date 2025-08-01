@@ -1,11 +1,30 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { FindUserOptions } from "./user.types";
-import { PaginationResult } from "src/common/types";
 import { UserRepository } from "./user.repository";
+import { PaginationResult } from "src/common/types";
 
 @Injectable()
 export class UserService {
     constructor(private userRepository: UserRepository,) { }
+    async findById(id: string) {
+        const user = this.userRepository.findById(id)
+        if (!user) {
+            throw new NotFoundException()
+        }
+        return user
+    }
+    async findByEmail(email: string) {
+        const user = await this.userRepository.findByEmail(email)
+        if (!user)
+            throw new NotFoundException()
+        return user
+    }
+    async findByUsername(username: string) {
+        const user = await this.userRepository.findByUsername(username)
+        if (!user)
+            throw new NotFoundException()
+        return user
+    }
     async find({ filter, pagination }: FindUserOptions): Promise<PaginationResult> {
         const { page, perPage } = pagination
         const effectiveOffset = (page - 1) * pagination.perPage
