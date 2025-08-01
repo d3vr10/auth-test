@@ -1,14 +1,9 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { DB_PROVIDER, DBConnection } from "../db/db.provider";
-import { and, eq } from "drizzle-orm";
+import { and, count, eq, SQL } from "drizzle-orm";
 import { userSchema } from "../db/schema";
-
-export type UserFilter = {
-    id?: string,
-    username?: string,
-    email?: string,
-    role?: string,
-}
+import { UserFilter } from "./user.types";
+import { PAGINATION_TAKE_LIMIT } from "./user.constants";
 
 @Injectable()
 export class UserRepository {
@@ -35,25 +30,55 @@ export class UserRepository {
         return result ?? null
     }
 
-    async find(filter: UserFilter) {
+    async find({ skip, take, ...filter }: UserFilter) {
         const filterFields = Object.entries(filter)
-        let whereClause;
-        if (filterFields.length === 0)
-            return [];
+        if (filterFields.length === 0) {
+            const rowsResult = await this.db.transaction(async (tx) => {
+                const [{ totalRows }] = await tx
+                    .select({ totalRows: count() })
+                    .from(userSchema)
+                const rows = await this.db.query.userSchema.findMany({
+                    offset: skip,
+                    limit: take,
+                })
+                return {
+                    data: rows,
+                    count: totalRows,
+                }
+            })
+            return rowsResult.data.length > 0
+                ? rowsResult
+                : null
+        }
+    
+        const conditions = filterFields.map(([field, value]) => eq(userSchema[field], value))
+        const whereClause = conditions.length > 1
+            ? and(...conditions)
+            : conditions as unknown as SQL<unknown>
 
-        if (filterFields.length === 1) {
-            const [field, value] = filterFields[0]
-            whereClause = eq(userSchema[field], value)
-        }
-        else if (whereClause.length > 1) {
-            whereClause = and(
-                ...filterFields.map(([field, value]) => eq(userSchema[field], value))
-            )
-        }
-        const result = await this.db.query.userSchema.findMany({
-            where: whereClause,
+        const rowsResult = await this.db.transaction(async (tx) => {
+            const [{ totalRows }] = await tx
+                .select({ totalRows: count() })
+                .from(userSchema)
+                .where(whereClause)
+                .offset(skip)
+                .limit(take)
+            const rows = await tx.query.userSchema.findMany({
+                where: whereClause,
+                limit: PAGINATION_TAKE_LIMIT,
+                offset: skip,
+
+            })
+
+            return {
+                count: totalRows,
+                data: rows,
+            }
+
         })
 
-        return result ?? null
+        return rowsResult.data.length > 0
+            ? rowsResult
+            : null
     }
 }
