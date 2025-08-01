@@ -23,8 +23,8 @@ export const userSchema = pgTable("user", {
     firstName: varchar("first_name").notNull(),
     lastName: varchar("last_name").notNull(),
     role: roleSchema('role'),
-    createdAt: timestamp("created_at", { withTimezone: true }),
-    updatedAt: timestamp("updated_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 })
 
 export type User = typeof userSchema.$inferSelect
