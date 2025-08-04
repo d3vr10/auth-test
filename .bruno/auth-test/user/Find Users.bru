@@ -1,0 +1,19 @@
+meta {
+  name: Find Users
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:3000/users?email=Marlin_Carroll5@gmail.com
+  body: none
+  auth: bearer
+}
+
+params:query {
+  email: Marlin_Carroll5@gmail.com
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1YTVkN2JjMy0wOTA0LTQ5MjUtOWM4Yi1kYTMxMTk1MjRiM2UiLCJ1c2VybmFtZSI6Ik9zYmFsZG8uUm9tYWd1ZXJhOTUiLCJlbWFpbCI6Ik9zYmFsZG9fUm9tYWd1ZXJhQHlhaG9vLmNvbSIsImlhdCI6MTc1NDMzMzQ0MiwiZXhwIjoxNzU1MTk3NDQyfQ.Vd7Y2pRTLqxPT0s85Au3UPGkx8Boufn7o1pjrKktuvk
+}

@@ -1,7 +1,7 @@
 import { Controller, InternalServerErrorException, Post, Redirect, Req, Res, UseGuards } from "@nestjs/common";
 import { User } from "../db/schema/db.schema";
 import { AuthGuard } from "@nestjs/passport";
-import { LocalAuthGuard } from "./guards/local-auth.guard";
+import { LocalAuthGuard } from "./guards/auth.guard";
 import { Request, Response} from "express";
 import { AuthService } from "./auth.service";
 import { jwtConstants } from "./auth.constants";

@@ -54,21 +54,31 @@ export class UserRepository {
         const conditions = filterFields.map(([field, value]) => eq(userSchema[field], value))
         const whereClause = conditions.length > 1
             ? and(...conditions)
-            : conditions as unknown as SQL<unknown>
+            : conditions.length === 1
+                ? conditions[0]
+                : null
 
         const rowsResult = await this.db.transaction(async (tx) => {
-            const [{ totalRows }] = await tx
+            let countQuery: any = tx
                 .select({ totalRows: count() })
                 .from(userSchema)
-                .where(whereClause)
                 .offset(skip)
                 .limit(take)
-            const rows = await tx.query.userSchema.findMany({
-                where: whereClause,
-                limit: PAGINATION_TAKE_LIMIT,
-                offset: skip,
+            
+            
+            let fetchQuery: any = tx
+                .select()
+                .from(userSchema)
+                .limit(PAGINATION_TAKE_LIMIT)
+                .offset(skip)
 
-            })
+            if (whereClause) {
+                countQuery = countQuery.where(whereClause)
+                fetchQuery = fetchQuery.where(whereClause)
+            }
+
+            const [{totalRows}] = await countQuery
+            const rows = await fetchQuery
 
             return {
                 count: totalRows,

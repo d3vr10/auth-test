@@ -1,4 +1,4 @@
-import { IsEmail, IsInt, IsNumber, IsOptional, IsString, Max, Min } from "class-validator";
+import { IsEmail, IsInt, IsOptional, IsString, Max, Min } from "class-validator";
 import { PAGINATION_TAKE_LIMIT } from "./user.constants";
 
 export class OffsetPaginationDto {
