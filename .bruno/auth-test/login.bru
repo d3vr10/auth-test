@@ -1,0 +1,22 @@
+meta {
+  name: login
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3000/auth/login
+  body: json
+  auth: basic
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "username": "Clyde.Carroll", 
+    "password": "hopibehonumarem"
+  }
+}

@@ -3,7 +3,7 @@ import { Pool } from "pg";
 import { drizzle, NodePgDatabase } from "drizzle-orm/node-postgres"
 import * as schema from "src/modules/db/schema"
 
-export const DB_CONNECTION_URL = "postgres://postgres:testing123@localhost:30001/postgres" ;
+export const DB_CONNECTION_URL = "postgres://auth-test:testing123@localhost:30001/auth-test" ;
 export const DB_PROVIDER = Symbol('DB_PROVIDER');
 export type DBConnection = NodePgDatabase<typeof schema>;
 export const dbProvider = {

@@ -21,6 +21,18 @@
             ],
             "request": "launch",
             "name": "Debug Populate Nest App"
+        },
+        {
+            "console": "integratedTerminal",
+            "type": "node",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "tsx",
+                "${file}",
+            ],
+            "request": "launch",
+            "name": "Debug Current File"
         }
+        
     ]
 }
