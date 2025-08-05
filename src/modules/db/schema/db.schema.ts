@@ -17,8 +17,8 @@ export const activationTokenSchema = pgTable('activation_token', {
 
 export const userSchema = pgTable("user", {
     id: uuid("id").$defaultFn(() => v4()).primaryKey(),
-    username: varchar("username").notNull(),
-    email: varchar("email", { length: 254 }).notNull(),
+    username: varchar("username").notNull().unique(),
+    email: varchar("email", { length: 254 }).notNull().unique(),
     hash: varchar("hash").notNull(),
     firstName: varchar("first_name").notNull(),
     lastName: varchar("last_name").notNull(),

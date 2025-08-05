@@ -22,6 +22,9 @@ import { jwtConstants } from "./auth.constants";
         PassportModule,
     ],
     providers: [
+        LocalAuthGuard,
+        LocalStrategy,
+        JWTStrategy,
         AuthService,
     ],
     controllers: [AuthController],

@@ -6,14 +6,14 @@ import { AuthGuard } from '@nestjs/passport';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  // @Get()
-  // getHello(): string {
-  //   return this.appService.getHello();
-  // }
-  
-  @UseGuards(AuthGuard('local'))
   @Get()
-  authGetHello(): string {
+  getHello(): string {
     return this.appService.getHello();
   }
+  
+  // @UseGuards(AuthGuard('local'))
+  // @Get()
+  // authGetHello(): string {
+  //   return this.appService.getHello();
+  // }
 }

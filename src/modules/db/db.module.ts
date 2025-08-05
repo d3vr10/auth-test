@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
-import { DB_PROVIDER, dbProvider } from "./db.provider";
+import { DB_PROVIDER, dbProvider, poolProvider, POSTGRES_POOL_PROVIDER } from "./db.provider";
 
 @Module({
-    providers: [dbProvider],
+    providers: [dbProvider, poolProvider],
     exports: [DB_PROVIDER],
 })
 export class DBModule {}

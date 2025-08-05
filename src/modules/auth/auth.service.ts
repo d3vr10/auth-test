@@ -3,6 +3,7 @@ import { UserService } from "../user/user.service";
 import { hashPassword, verifyPassword } from "./lib/auth.crypto";
 import { User } from "../db/schema/db.schema";
 import { JwtService } from "@nestjs/jwt";
+import { jwtConstants } from "./auth.constants";
 
 @Injectable()
 export class AuthService {
@@ -10,19 +11,24 @@ export class AuthService {
         private userService: UserService,
         private jwtService: JwtService,
     ) {}
+    private _renderUserPayload(user: User) {
+        const { hash, ...rest } = user
+        return rest
+    }
     async validateUser(username: string, password: string) {
         const user = await this.userService.findByUsername(username)
         return await verifyPassword(user.hash, password)
-            ? user
+            ? this._renderUserPayload(user)
             : null
     }
-    async login (user: User)  {
+    async login (user: Omit<User, 'hash'>) {
         const payload = { 
             sub: user.id,
             username: user.username,
+            email: user.email,
         }
         return {
-            "access_token": this.jwtService.sign(payload)
+            [jwtConstants.TOKEN_NAME] : this.jwtService.sign(payload)
         }
     }
 }

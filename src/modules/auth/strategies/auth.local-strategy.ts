@@ -10,7 +10,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     constructor (private authService: AuthService) {
         super({usernameField: "username", passwordField: "password"})
     }
-    async validate(username: string, password: string): Promise<User> {
+    async validate(username: string, password: string): Promise<Omit<User, 'hash'>> {
         const user = await this.authService.validateUser(username, password)
         if (!user) {
             throw new NotFoundException();

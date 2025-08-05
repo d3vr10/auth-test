@@ -14,10 +14,12 @@ export class JWTStrategy extends PassportStrategy(Strategy) {
             secretOrKey: jwtConstants.ACCESS_TOKEN,
         })
     }
+
     async validate(payload: any) {
         return { 
             id: payload.sub, 
-            username: payload.username 
+            username: payload.username,
+            email: payload.email, 
         }
     }
 }

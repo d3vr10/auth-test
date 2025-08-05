@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker"
 import { randomInt } from "crypto"
 import { hashPassword } from "src/modules/auth/lib/auth.crypto"
-import { DBConnection, dbProvider } from "src/modules/db/db.provider"
+import { DBConnection, dbProvider, poolProvider } from "src/modules/db/db.provider"
 import { userRoles, userSchema } from "src/modules/db/schema/db.schema"
 import { writeFileSync } from "fs"
 import path from "path"
@@ -26,6 +26,9 @@ function randomWeightedChoice(list: any[], weights: number[]) {
 async function generateUsers(db: DBConnection, count: number = 30) {
     const users = []
     const fileUsers = []
+    let now;
+    let end;
+    now = performance.now()
     for (let i = 0; i < count; i++) {
         const firstName = faker.person.firstName()
         const lastName = faker.person.lastName()
@@ -45,20 +48,36 @@ async function generateUsers(db: DBConnection, count: number = 30) {
         })
         users.push(user)
     }
+    end = performance.now()
+    console.log(`Generated in memory ${users.length} users in ${end - now} ms`)
 
-    await db.insert(userSchema).values(users).execute()
+    now = performance.now()
+    await db.insert(userSchema).values(users)
+    end = performance.now()
+    console.log(`Wrote ${users.length} rows into db in ${end - now} ms`)
+
+    const CREDS_FILENAME = 'creds.json'
+
+    now = performance.now()
     writeFileSync(
-        path.join(process.cwd(), "creds.json"), 
+        path.join(process.cwd(), CREDS_FILENAME), 
         JSON.stringify(fileUsers, null, 2), 
         { 
             encoding: "utf-8",
         },
     )
+    end = performance.now()
+    console.log(`Dumped ${fileUsers.length} user credentials into ${CREDS_FILENAME} in ${end - now} ms`)
 }
 
 if (require.main === module) {
     (async () => {
-        const db = dbProvider.useFactory()
+        const pool = poolProvider.useFactory()
+        const db = dbProvider.useFactory(pool)
         await generateUsers(db, 60)
+        await pool.end()
+        if (pool.ended)
+            console.log('Closed database connection')
+        
     })()
 }
